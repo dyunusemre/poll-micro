@@ -1,6 +1,5 @@
-package com.yundi.pollauthservice.register.dto;
+package com.yundi.pollauthservice.auth.dto;
 
-import com.yundi.pollauthservice.register.validator.ValidPassword;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;

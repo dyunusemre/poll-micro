@@ -1,4 +1,4 @@
-package com.yundi.pollauthservice.auth.service;
+package com.yundi.pollauthservice.security.service;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

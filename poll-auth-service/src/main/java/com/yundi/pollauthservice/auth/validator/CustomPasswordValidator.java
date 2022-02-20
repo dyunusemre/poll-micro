@@ -1,4 +1,4 @@
-package com.yundi.pollauthservice.register.validator;
+package com.yundi.pollauthservice.auth.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

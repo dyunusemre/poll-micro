@@ -1,7 +1,7 @@
-package com.yundi.pollauthservice.auth.service;
+package com.yundi.pollauthservice.security.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yundi.pollauthservice.auth.jwt.JwtUtil;
+import com.yundi.pollauthservice.security.jwt.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,8 +39,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserDetails userDetails = (UserDetails) authResult.getPrincipal();
         Map<String, String> token = new HashMap<>();
-        token.put("access_token", jwtUtil.createToken(userDetails.getUsername(), "access_token"));
-        token.put("refresh_token", jwtUtil.createToken(userDetails.getUsername(), "refresh_token"));
+        token.put("access_token", jwtUtil.createTokenByUserDetailsAndTokenType(userDetails, "access_token"));
+        token.put("refresh_token", jwtUtil.createTokenByUserDetailsAndTokenType(userDetails, "refresh_token"));
         response.setContentType("application/json");
         new ObjectMapper().writeValue(response.getOutputStream(), token);
     }

@@ -1,9 +1,9 @@
-package com.yundi.pollauthservice.register.controller;
+package com.yundi.pollauthservice.auth.controller;
 
-import com.yundi.pollauthservice.register.dto.AuthenticationRequest;
-import com.yundi.pollauthservice.register.dto.AuthenticationResponse;
-import com.yundi.pollauthservice.register.dto.RegisterRequest;
-import com.yundi.pollauthservice.register.service.AuthService;
+import com.yundi.pollauthservice.auth.dto.AuthenticationRequest;
+import com.yundi.pollauthservice.auth.dto.AuthenticationResponse;
+import com.yundi.pollauthservice.auth.dto.RegisterRequest;
+import com.yundi.pollauthservice.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

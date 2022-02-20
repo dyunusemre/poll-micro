@@ -1,14 +1,14 @@
-package com.yundi.pollauthservice.auth.jwt;
+package com.yundi.pollauthservice.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 @Component
 public class JwtUtil {
@@ -24,28 +24,50 @@ public class JwtUtil {
         return extractAllClaims(token).getSubject();
     }
 
+    public Claims extractClaims(String token) {
+        return extractAllClaims(token);
+    }
+
     public boolean isValidToken(String token) {
         Claims claims = extractAllClaims(token);
         return claims != null && !isTokenExpired(token);
     }
 
     public String createAccessTokenByRefreshToken(String refreshToken) {
-        String username = extractUsername(refreshToken);
-        return createToken(username, "access_token");
+        Claims claims = extractClaims(refreshToken);
+        return createTokenByClaims(claims);
     }
 
-    public String createToken(String username, String tokenType) {
+    private String createTokenByClaims(Claims claims) {
         return Jwts.builder()
-                .setClaims(new HashMap<>())
-                .setSubject(username)
+                .setClaims(claims)
+                .setSubject(claims.getSubject())
+                .setIssuedAt(getIssueDate())
+                .setExpiration(getExpirationDateByTokenType("access_token"))
+                .signWith(getSecretKey(tokenHiddenSecret))
+                .compact();
+    }
+
+    public String createTokenByUserDetailsAndTokenType(UserDetails userDetails, String tokenType) {
+        return Jwts.builder()
+                .setClaims(claims(userDetails))
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(getIssueDate())
                 .setExpiration(getExpirationDateByTokenType(tokenType))
                 .signWith(getSecretKey(tokenHiddenSecret))
                 .compact();
     }
 
+    private Map<String, Object> claims(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", userDetails.getAuthorities());
+        return claims;
+    }
+
     private Date getExpirationDateByTokenType(String tokenType) {
-        return new Date("access_token".equals(tokenType) ? tokenExpireDuration : tokenExpireDuration * 1000 + System.currentTimeMillis());
+        return new Date("access_token".equals(tokenType)
+                ? tokenExpireDuration + System.currentTimeMillis()
+                : tokenExpireDuration * 1000 + System.currentTimeMillis());
     }
 
     private Key getSecretKey(String secret) {

@@ -1,14 +1,16 @@
-package com.yundi.pollauthservice.register.service;
+package com.yundi.pollauthservice.auth.service;
 
-import com.yundi.pollauthservice.auth.jwt.JwtUtil;
-import com.yundi.pollauthservice.register.dto.AuthenticationRequest;
-import com.yundi.pollauthservice.register.dto.AuthenticationResponse;
-import com.yundi.pollauthservice.register.dto.RegisterRequest;
+import com.yundi.pollauthservice.security.jwt.JwtUtil;
+import com.yundi.pollauthservice.auth.dto.AuthenticationRequest;
+import com.yundi.pollauthservice.auth.dto.AuthenticationResponse;
+import com.yundi.pollauthservice.auth.dto.RegisterRequest;
 import com.yundi.pollauthservice.userauth.model.UserAuth;
 import com.yundi.pollauthservice.userauth.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,17 +24,18 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse getAccessTokenByRegister(RegisterRequest registerRequest) {
-        userAuthService.saveAuth(UserAuth.builder()
+        UserAuth userAuth = userAuthService.saveAuth(UserAuth.builder()
                 .username(registerRequest.getUsername())
                 .password(registerRequest.getPassword())
                 .build());
-        //TODO SEND EVENT HERE
-        return createTokens(registerRequest.getUsername());
+
+        UserDetails userDetails = userAuthService.findUserDetailsByUsername(userAuth.getUsername());
+        return createTokens(userDetails);
     }
 
     public AuthenticationResponse getAccessTokenByCredentials(AuthenticationRequest request) {
-        authenticateUser(request.getUsername(), request.getPassword());
-        return createTokens(request.getUsername());
+        Authentication authentication = authenticateUser(request.getUsername(), request.getPassword());
+        return createTokens((UserDetails) authentication.getPrincipal());
     }
 
     public AuthenticationResponse getAccessTokenByRefresh(HttpServletRequest request) {
@@ -44,9 +47,9 @@ public class AuthService {
                 .build();
     }
 
-    private AuthenticationResponse createTokens(String username) {
-        String accessToken = jwtUtil.createToken(username, "access_token");
-        String refreshToken = jwtUtil.createToken(username, "refresh_token");
+    private AuthenticationResponse createTokens(UserDetails userDetails) {
+        String accessToken = jwtUtil.createTokenByUserDetailsAndTokenType(userDetails, "access_token");
+        String refreshToken = jwtUtil.createTokenByUserDetailsAndTokenType(userDetails, "refresh_token");
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -61,10 +64,11 @@ public class AuthService {
         return authorization.substring("Bearer ".length());
     }
 
-    private void authenticateUser(String username, String password) {
+    private Authentication authenticateUser(String username, String password) {
         try {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-            authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+            UserDetails userDetails = userAuthService.findUserDetailsByUsername(username);
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
+            return authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         } catch (Exception ex) {
             throw new RuntimeException("Bad Credentials");
         }

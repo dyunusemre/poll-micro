@@ -1,7 +1,6 @@
-package com.yundi.pollauthservice.auth.service;
+package com.yundi.pollauthservice.security.service;
 
-import com.yundi.pollauthservice.auth.jwt.JwtUtil;
-import com.yundi.pollauthservice.userauth.service.UserAuthService;
+import com.yundi.pollauthservice.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;

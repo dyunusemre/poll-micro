@@ -1,4 +1,4 @@
-package com.yundi.pollauthservice.register.dto;
+package com.yundi.pollauthservice.auth.dto;
 
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.yundi.pollauthservice.register.validator;
+package com.yundi.pollauthservice.auth.validator;
 
 import javax.validation.Constraint;
 import java.lang.annotation.ElementType;

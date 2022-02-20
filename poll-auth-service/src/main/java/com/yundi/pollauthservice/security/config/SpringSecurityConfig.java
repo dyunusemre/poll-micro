@@ -1,11 +1,9 @@
-package com.yundi.pollauthservice.auth.config;
+package com.yundi.pollauthservice.security.config;
 
 
-import com.yundi.pollauthservice.auth.jwt.JwtUtil;
-import com.yundi.pollauthservice.auth.service.CustomAuthenticationFilter;
-import com.yundi.pollauthservice.auth.service.CustomAuthorizationFilter;
-import com.yundi.pollauthservice.auth.service.CustomAuthenticationEntryPoint;
-import com.yundi.pollauthservice.auth.service.CustomUserDetailService;
+import com.yundi.pollauthservice.security.service.CustomAuthorizationFilter;
+import com.yundi.pollauthservice.security.service.CustomAuthenticationEntryPoint;
+import com.yundi.pollauthservice.security.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

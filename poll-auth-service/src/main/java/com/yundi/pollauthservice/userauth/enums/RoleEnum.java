@@ -1,0 +1,6 @@
+package com.yundi.pollauthservice.userauth.enums;
+
+public enum RoleEnum {
+    ROLE_USER,
+    ROLE_ADMIN
+}

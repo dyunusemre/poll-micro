@@ -1,4 +1,4 @@
-package com.yundi.pollauthservice.auth.service;
+package com.yundi.pollauthservice.security.service;
 
 import com.yundi.pollauthservice.userauth.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
