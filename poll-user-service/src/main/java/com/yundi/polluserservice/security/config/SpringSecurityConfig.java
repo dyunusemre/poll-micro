@@ -14,8 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //auth.userDetailsService(customUserDetailService).passwordEncoder(bCryptPasswordEncoder);

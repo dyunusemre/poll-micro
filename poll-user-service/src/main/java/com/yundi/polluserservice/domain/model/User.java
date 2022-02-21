@@ -1,5 +1,6 @@
 package com.yundi.polluserservice.domain.model;
 
+import com.yundi.polluserservice.consumer.UserData;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,5 +18,11 @@ public class User {
     private String email;
     private String name;
     private String lastName;
-    private String password;
+
+    public User(UserData userData) {
+        this.username = userData.getUsername();
+        this.lastName = userData.getLastName();
+        this.name = userData.getName();
+        this.email = userData.getEmail();
+    }
 }

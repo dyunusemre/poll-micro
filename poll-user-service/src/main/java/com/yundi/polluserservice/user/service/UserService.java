@@ -15,6 +15,4 @@ public interface UserService {
     User findUserByUsername(String username);
 
     UserProfileResponse getUserProfileInformation(String username);
-
-    UserDetails findUserDetailsByUsername(String username);
 }

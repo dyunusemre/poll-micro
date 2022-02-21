@@ -15,19 +15,16 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final PasswordEncoder encoder;
     private final UserRepository userRepository;
 
     @Override
     public User save(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
     @Override
     public void update(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.save(user);
+
     }
 
     public void updateEmail(String username, String newEmail) {
@@ -46,13 +43,6 @@ public class UserServiceImpl implements UserService {
     public UserProfileResponse getUserProfileInformation(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
         return getUserProfile(user);
-    }
-
-    @Override
-    public UserDetails findUserDetailsByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-        //TODO Set grants here
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.emptyList());
     }
 
     private UserProfileResponse getUserProfile(User user) {
