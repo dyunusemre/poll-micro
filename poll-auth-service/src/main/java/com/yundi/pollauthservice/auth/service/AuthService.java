@@ -1,5 +1,6 @@
 package com.yundi.pollauthservice.auth.service;
 
+import com.yundi.pollauthservice.producer.KafkaProducer;
 import com.yundi.pollauthservice.security.jwt.JwtUtil;
 import com.yundi.pollauthservice.auth.dto.AuthenticationRequest;
 import com.yundi.pollauthservice.auth.dto.AuthenticationResponse;
@@ -7,6 +8,8 @@ import com.yundi.pollauthservice.auth.dto.RegisterRequest;
 import com.yundi.pollauthservice.userauth.model.UserAuth;
 import com.yundi.pollauthservice.userauth.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.Message;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,13 +25,14 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final UserAuthService userAuthService;
     private final AuthenticationManager authenticationManager;
+    private final KafkaProducer kafkaProducer;
 
     public AuthenticationResponse getAccessTokenByRegister(RegisterRequest registerRequest) {
         UserAuth userAuth = userAuthService.saveAuth(UserAuth.builder()
                 .username(registerRequest.getUsername())
                 .password(registerRequest.getPassword())
                 .build());
-
+        kafkaProducer.sendRegisteredUser(registerRequest);
         UserDetails userDetails = userAuthService.findUserDetailsByUsername(userAuth.getUsername());
         return createTokens(userDetails);
     }
