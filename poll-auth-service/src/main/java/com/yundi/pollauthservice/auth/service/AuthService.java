@@ -8,8 +8,6 @@ import com.yundi.pollauthservice.auth.dto.RegisterRequest;
 import com.yundi.pollauthservice.userauth.model.UserAuth;
 import com.yundi.pollauthservice.userauth.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,12 +25,8 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final KafkaProducer kafkaProducer;
 
-    public AuthenticationResponse getAccessTokenByRegister(RegisterRequest registerRequest) {
-        UserAuth userAuth = userAuthService.saveAuth(UserAuth.builder()
-                .username(registerRequest.getUsername())
-                .password(registerRequest.getPassword())
-                .build());
-        kafkaProducer.sendRegisteredUser(registerRequest);
+    public AuthenticationResponse getAccessTokenByRegisterAndSendUser(RegisterRequest registerRequest) {
+        UserAuth userAuth = saveUserAndSenMessage(registerRequest);
         UserDetails userDetails = userAuthService.findUserDetailsByUsername(userAuth.getUsername());
         return createTokens(userDetails);
     }
@@ -49,6 +43,16 @@ public class AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    private UserAuth saveUserAndSenMessage(RegisterRequest registerRequest) {
+        UserAuth userAuth = userAuthService.saveAuth(UserAuth.builder()
+                .username(registerRequest.getUsername())
+                .password(registerRequest.getPassword())
+                .build());
+
+        kafkaProducer.sendRegisteredUserMessage(registerRequest);
+        return userAuth;
     }
 
     private AuthenticationResponse createTokens(UserDetails userDetails) {

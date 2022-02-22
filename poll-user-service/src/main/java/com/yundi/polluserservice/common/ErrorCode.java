@@ -1,4 +1,4 @@
-package com.yundi.polluserservice.domain.enums;
+package com.yundi.polluserservice.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
-package com.yundi.polluserservice.domain.common;
+package com.yundi.polluserservice.common;
 
-import com.yundi.polluserservice.domain.enums.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 

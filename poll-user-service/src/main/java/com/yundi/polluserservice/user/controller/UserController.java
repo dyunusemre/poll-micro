@@ -1,6 +1,6 @@
 package com.yundi.polluserservice.user.controller;
 
-import com.yundi.polluserservice.domain.common.BaseController;
+import com.yundi.polluserservice.common.BaseController;
 import com.yundi.polluserservice.user.dto.UserProfileResponse;
 import com.yundi.polluserservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.yundi.polluserservice.domain.common;
+package com.yundi.polluserservice.exception;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

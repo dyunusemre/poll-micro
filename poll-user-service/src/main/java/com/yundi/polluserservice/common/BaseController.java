@@ -1,4 +1,4 @@
-package com.yundi.polluserservice.domain.common;
+package com.yundi.polluserservice.common;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,13 +1,12 @@
 package com.yundi.polluserservice.recaptcha;
 
-import com.yundi.polluserservice.domain.common.InvalidRecaptchaException;
-import com.yundi.polluserservice.domain.enums.ErrorCode;
+import com.yundi.polluserservice.exception.InvalidRecaptchaException;
+import com.yundi.polluserservice.common.ErrorCode;
 import com.yundi.polluserservice.recaptcha.client.GoogleRecaptchaClient;
 import com.yundi.polluserservice.recaptcha.client.RecaptchaResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;

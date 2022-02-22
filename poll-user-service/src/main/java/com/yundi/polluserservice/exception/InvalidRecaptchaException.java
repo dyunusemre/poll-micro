@@ -1,6 +1,7 @@
-package com.yundi.polluserservice.domain.common;
+package com.yundi.polluserservice.exception;
 
-import com.yundi.polluserservice.domain.enums.ErrorCode;
+import com.yundi.polluserservice.common.BaseCommonRuntimeException;
+import com.yundi.polluserservice.common.ErrorCode;
 
 public class InvalidRecaptchaException extends BaseCommonRuntimeException {
 

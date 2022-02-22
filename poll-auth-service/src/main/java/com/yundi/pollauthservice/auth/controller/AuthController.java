@@ -32,6 +32,6 @@ public class AuthController {
 
     @PostMapping("/sign-up")
     public AuthenticationResponse signUp(@RequestBody RegisterRequest registerRequest) throws Exception {
-        return authService.getAccessTokenByRegister(registerRequest);
+        return authService.getAccessTokenByRegisterAndSendUser(registerRequest);
     }
 }
