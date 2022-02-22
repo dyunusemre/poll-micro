@@ -8,6 +8,7 @@ import java.util.List;
 @RestController("/question")
 @RequiredArgsConstructor
 public class QuestionController {
+
     @GetMapping("/all")
     public String getPollQuestions() {
         return null;
