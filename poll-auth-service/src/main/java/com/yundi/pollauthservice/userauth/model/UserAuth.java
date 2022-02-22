@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@Document("UserAuth")
+@Document("user-auth")
 public class UserAuth {
     @Id
     private String id;
