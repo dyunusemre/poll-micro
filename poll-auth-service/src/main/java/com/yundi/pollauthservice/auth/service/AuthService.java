@@ -25,7 +25,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final KafkaProducer kafkaProducer;
 
-    public AuthenticationResponse getAccessTokenByRegisterAndSendUser(RegisterRequest registerRequest) {
+    public AuthenticationResponse sendUserAndGetAccessTokenByRegister(RegisterRequest registerRequest) {
         UserAuth userAuth = saveUserAndSenMessage(registerRequest);
         UserDetails userDetails = userAuthService.findUserDetailsByUsername(userAuth.getUsername());
         return createTokens(userDetails);
@@ -75,7 +75,7 @@ public class AuthService {
     private Authentication authenticateUser(String username, String password) {
         try {
             UserDetails userDetails = userAuthService.findUserDetailsByUsername(username);
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), password);
             return authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         } catch (Exception ex) {
             throw new RuntimeException("Bad Credentials");

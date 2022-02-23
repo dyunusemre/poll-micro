@@ -1,4 +1,4 @@
-package com.yundi.pollapigw.configuration;
+package com.yundi.pollapigw.filter;
 
 import org.springframework.context.annotation.Configuration;
 

@@ -48,11 +48,11 @@ public class UserAuthServiceImpl implements UserAuthService {
         return Collections.singleton(roleRepository.findByName(name).orElseThrow(() -> new RuntimeException("Role Couldnt Fine")));
     }
 
-    private List<GrantedAuthority> getAuthorities(UserAuth user) {
+    private Set<GrantedAuthority> getAuthorities(UserAuth user) {
         return user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     private boolean isUsernameUnique(String username) {
