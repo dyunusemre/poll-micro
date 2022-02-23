@@ -36,13 +36,9 @@ public class AuthenticationFilter implements GlobalFilter {
             if (isInvalidToken(request))
                 return onUnauthorized(exchange);
 
-            setAuthorizationHeaders(exchange);
+            createAuthorizationHeaders(exchange);
         }
         return chain.filter(exchange);
-    }
-
-    private boolean isInvalidToken(ServerHttpRequest request) {
-        return isAuthorizationMissing(request) || jwtUtil.isInvalidToken(getAuthorizationHeader(request));
     }
 
     private Mono<Void> onUnauthorized(ServerWebExchange exchange) {
@@ -50,7 +46,7 @@ public class AuthenticationFilter implements GlobalFilter {
         return exchange.getResponse().setComplete();
     }
 
-    private void setAuthorizationHeaders(ServerWebExchange exchange) {
+    private void createAuthorizationHeaders(ServerWebExchange exchange) {
         String token = getAuthorizationHeader(exchange.getRequest());
         exchange.getRequest().mutate()
                 .header("username", jwtUtil.extractUsername(token))
@@ -62,7 +58,7 @@ public class AuthenticationFilter implements GlobalFilter {
         return request.getHeaders().getOrEmpty("Authorization").get(0).substring("Bearer ".length());
     }
 
-    private boolean isAuthorizationMissing(ServerHttpRequest request) {
-        return !request.getHeaders().containsKey("Authorization");
+    private boolean isInvalidToken(ServerHttpRequest request) {
+        return !request.getHeaders().containsKey("Authorization") || jwtUtil.isInvalidToken(getAuthorizationHeader(request));
     }
 }
