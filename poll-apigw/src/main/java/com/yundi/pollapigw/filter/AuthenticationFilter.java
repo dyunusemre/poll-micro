@@ -28,17 +28,17 @@ public class AuthenticationFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        Predicate<ServerHttpRequest> isApiSecure = serverHttpRequest ->
-                openEndpoints.stream()
-                        .noneMatch(s -> request.getURI().getPath().contains(s));
-
-        if (isApiSecure.test(request)) {
+        if (isApiSecure(request).test(request)) {
             if (isInvalidToken(request))
                 return onUnauthorized(exchange);
 
             createAuthorizationHeaders(exchange);
         }
         return chain.filter(exchange);
+    }
+
+    private Predicate<ServerHttpRequest> isApiSecure(ServerHttpRequest request) {
+        return httpRequest -> openEndpoints.stream().noneMatch(s -> request.getURI().getPath().contains(s));
     }
 
     private Mono<Void> onUnauthorized(ServerWebExchange exchange) {
