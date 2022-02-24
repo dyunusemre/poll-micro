@@ -20,7 +20,7 @@ public class AuthenticationFilter implements GlobalFilter {
     private final JwtUtil jwtUtil;
 
     private final List<String> openEndpoints = List.of(
-            "/register",
+            "/sign-up",
             "/login",
             "/question/all"
     );
