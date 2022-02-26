@@ -4,4 +4,5 @@ Basis<br>
 Auth Service => Authenticate User and set roles <br>
 Apigw Service => Authentication Filter and Routing <br>
 Config Serivce => Centralized Config Server <br>
-Naming Service => Service Registry
+Naming Service => Service Registry <br>
+Kafka Binders used for messaging, Zipkin used for tracing 
